@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Circles!!</title>
+    <style body {margin:0px}></style>
+    <script src="libs/phaser-2.0.6.min.js"></script>
+    <script src="core/Boot.js"></script>
+    <script src="core/Preloader.js"></script>
+    <script src="core/Game.js"></script>
+</head>
+
+<body>
+    <script>
+        (function () {
+            var game = new Phaser.Game(640, 800, Phaser.AUTO, 'game');
+            game.state.add('Boot', Circles.Boot);
+            game.state.add('Preloader', Circles.Preloader);
+            game.state.add('Game', Circles.Game);
+            // start the Boot state
+            game.state.start('Boot');
+        }
+        
+        )();
+    </script>
+
+</body>
+
+</html>
