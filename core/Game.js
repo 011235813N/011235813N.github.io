@@ -128,7 +128,7 @@ Circles.Game.prototype = {
     countDownTimer: function () {
         this._timeElapsed++;
         if (this._startTime) {
-            var timeLimit = 15;
+            var timeLimit = 10;
             countDownSeconds = timeLimit - this._timeElapsed;
             this._timerBar.width += 21.7;
             if (countDownSeconds <= 0) {
@@ -185,6 +185,14 @@ Circles.Game.prototype = {
         this.input.onDown.add(function () {
             pausedDialog.destroy();
             this.game.paused = false;
+
+            //share score on twitter
+            var tweetbegin = 'http://twitter.com/home?status=';
+            var tweettxt = 'I scored ' + Circles._score + ' at #Circles!! -' + window.location.href + '.';
+            var finaltweet = tweetbegin + encodeURIComponent(tweettxt);
+            window.open(finaltweet, '_blank');
+
+
             this.restartGame();
         }, this);
     }
@@ -206,7 +214,7 @@ Circles.item = {
             circle.kill();
             if (Circles._counter == 5) {
                 Circles._gameState = 1;
-            }else{
+            } else {
                 Circles._counter++;
             }
         } else {
