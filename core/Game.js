@@ -188,7 +188,7 @@ Circles.Game.prototype = {
 
             //share score on twitter
             var tweetbegin = 'http://twitter.com/home?status=';
-            var tweettxt = 'I scored ' + Circles._score + ' at #Circles!! -' + window.location.href + '.';
+            var tweettxt = 'I scored ' + Circles._score + ' at Circles!! -' + window.location.href + '.';
             var finaltweet = tweetbegin + encodeURIComponent(tweettxt);
             window.open(finaltweet, '_blank');
 
