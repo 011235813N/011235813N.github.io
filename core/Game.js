@@ -31,7 +31,7 @@ Circles.Game.prototype = {
         var titleRow = this.add.image(0, 0, 'titleRow');
         var headerRow = this.add.image(0, 75, 'headerRow');
         this._timerBar = this.add.image(0, 175, 'timerBar');
-        var bmpTextTitle = this.add.bitmapText(15, 15, 'dosis', 'Circles!!', 60);
+        var bmpTextTitle = this.add.bitmapText(15, 15, 'dosis', 'Cisrcles!!', 60);
         var bmpTextPoints = this.add.bitmapText(Circles.GAME_WIDTH - 150, 15, 'dosis', 'points: ', 25);
         Circles._scoreText = this.add.bitmapText(Circles.GAME_WIDTH - 85, 15, 'dosis', '000', 40);
         //******END BUILD UI
