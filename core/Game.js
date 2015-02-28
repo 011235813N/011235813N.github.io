@@ -19,21 +19,26 @@ Circles.Game = function (game) {
     this._circlesHeaderArray = []; // arreglo de circulos del encabezado (temporal)
     Circles._gameCircleHeaderArray = []; //arreglo de circulos para todo el juego
     Circles._scoreText = null;
-    Circles._score = 0;
+    //Circles._score = 0;
     Circles._coinAsset = null;
     Circles._coinTween = null;
     Circles._counter = 0;
     Circles._gameState = 0; // 1:win | 2:game over 
+    Circles._timerLimit = 0;
 };
 Circles.Game.prototype = {
     create: function () {
+        
+        console.log(Circles.GAME_SCORE);
+        
+        
         //******BUILD UI
         var titleRow = this.add.image(0, 0, 'titleRow');
         var headerRow = this.add.image(0, 75, 'headerRow');
         this._timerBar = this.add.image(0, 175, 'timerBar');
         var bmpTextTitle = this.add.bitmapText(15, 15, 'dosis', 'Circles!!', 60);
         var bmpTextPoints = this.add.bitmapText(Circles.GAME_WIDTH - 150, 15, 'dosis', 'points: ', 25);
-        Circles._scoreText = this.add.bitmapText(Circles.GAME_WIDTH - 85, 15, 'dosis', '000', 40);
+        Circles._scoreText = this.add.bitmapText(Circles.GAME_WIDTH - 85, 15, 'dosis', Circles.GAME_SCORE, 40);
         //******END BUILD UI
         this._fontStyle = {
             font: "40px Arial",
@@ -43,11 +48,15 @@ Circles.Game.prototype = {
             align: "center"
         };
         this._timerBar.width += 0.01;
+        Circles._timerLimit = this.rnd.integerInRange(5, 15);
+        
+        
+        
         this._grid = this.add.group();
         var circAxisX = 60;
         var circAxisY = 200;
         var circleHeader;
-        Circles._score = 0;
+        //Circles._score = 0;
         Circles._coinAsset = this.add.image(0, 0, 'coin');
         Circles._coinTween = this.add.tween(Circles._coinAsset).to({
             alpha: 0
@@ -125,12 +134,11 @@ Circles.Game.prototype = {
         this._startTime = true;
         _timer.start();
     },
-    countDownTimer: function () {
+    countDownTimer: function () {        
         this._timeElapsed++;
         if (this._startTime) {
-            var timeLimit = 15;
-            countDownSeconds = timeLimit - this._timeElapsed;
-            this._timerBar.width += 21.7;
+            countDownSeconds = Circles._timerLimit - this._timeElapsed;
+            this._timerBar.width += 630/Circles._timerLimit;
             if (countDownSeconds <= 0) {
                 this.gameOver();
             }
@@ -156,8 +164,8 @@ Circles.Game.prototype = {
         this._fontStyle = null;
         this._circlesHeaderArray = []; // arreglo de circulos del encabezado (temporal)
         Circles._gameCircleHeaderArray = []; //arreglo de circulos para todo el juego
-        Circles._scoreText = null;
-        Circles._score = 0;
+        //Circles._scoreText = null;
+        //Circles._score = 0;
         Circles._coinAsset = null;
         Circles._coinTween = null;
         Circles._counter = 0;
@@ -185,6 +193,14 @@ Circles.Game.prototype = {
         this.input.onDown.add(function () {
             pausedDialog.destroy();
             this.game.paused = false;
+
+            //share score on twitter
+            var tweetbegin = 'http://twitter.com/home?status=';
+            var tweettxt = 'I scored ' + Circles.GAME_SCORE + ' at Circles!! -' + window.location.href + '.';
+            var finaltweet = tweetbegin + encodeURIComponent(tweettxt);
+            window.open(finaltweet, '_blank');
+
+
             this.restartGame();
         }, this);
     }
@@ -201,12 +217,15 @@ Circles.item = {
             Circles._coinAsset.visible = true;
             Circles._coinTween.start();
             //anim poits.
-            Circles._score += 10;
-            Circles._scoreText.setText(Circles._score);
+            //Circles._score += 10;
+            Circles.GAME_SCORE += 10;
+            //Circles._scoreText.setText(Circles._score);
+            Circles._scoreText.setText(Circles.GAME_SCORE);
+            
             circle.kill();
             if (Circles._counter == 5) {
                 Circles._gameState = 1;
-            }else{
+            } else {
                 Circles._counter++;
             }
         } else {

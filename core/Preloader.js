@@ -1,6 +1,8 @@
 Circles.Preloader = function (game) {
     Circles.GAME_WIDTH = 640;
     Circles.GAME_HEIGHT = 800;
+    Circles.GAME_SCORE = 0;
+    
 };
 Circles.Preloader.prototype = {
     preload: function () {
