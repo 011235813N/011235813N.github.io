@@ -18,19 +18,17 @@ Circles.Game = function (game) {
     this._fontStyle = null;
     this._circlesHeaderArray = []; // arreglo de circulos del encabezado (temporal)
     Circles._gameCircleHeaderArray = []; //arreglo de circulos para todo el juego
-    Circles._scoreText = null;
+    //Circles._scoreText = null;
     //Circles._score = 0;
     Circles._coinAsset = null;
     Circles._coinTween = null;
     Circles._counter = 0;
     Circles._gameState = 0; // 1:win | 2:game over 
-    Circles._timerLimit = 0;
+    Circles._timerLimit = 1;
 };
 Circles.Game.prototype = {
     create: function () {
-
-        console.log(Circles.GAME_SCORE);
-
+        
 
         //******BUILD UI
         var titleRow = this.add.image(0, 0, 'titleRow');
@@ -38,15 +36,17 @@ Circles.Game.prototype = {
         this._timerBar = this.add.image(0, 175, 'timerBar');
         var bmpTextTitle = this.add.bitmapText(15, 15, 'dosis', 'Circles!!', 60);
         var bmpTextPoints = this.add.bitmapText(Circles.GAME_WIDTH - 150, 15, 'dosis', 'points: ', 25);
-        Circles._scoreText = this.add.bitmapText(Circles.GAME_WIDTH - 85, 15, 'dosis', Circles.GAME_SCORE, 40);
+        Circles._scoreText = this.add.bitmapText(Circles.GAME_WIDTH - 85, 15, 'dosis', '', 40);
         //******END BUILD UI
-        this._fontStyle = {
+        
+        /*this._fontStyle = {
             font: "40px Arial",
             fill: "#FFCC00",
             stroke: "#333",
             strokeThickness: 5,
             align: "center"
-        };
+        };*/
+        Circles._scoreText.setText(Circles.GAME_SCORE);
         this._timerBar.width += 0.01;
         Circles._timerLimit = this.rnd.integerInRange(5, 15);
 
@@ -182,7 +182,16 @@ Circles.Game.prototype = {
         this.input.onDown.add(function () {
             pausedDialog.destroy();
             this.game.paused = false;
+            
+            
+             //share score on twitter
+            var tweetbegin = 'http://twitter.com/home?status=';
+            var tweettxt = 'I scored ' + Circles.GAME_SCORE + ' at Circles!! -' + window.location.href + '.';
+            var finaltweet = tweetbegin + encodeURIComponent(tweettxt);
+            window.open(finaltweet, '_blank');
+            
             Circles.GAME_SCORE = 0;
+            
             this.restartGame();
         }, this);
     },
@@ -194,11 +203,7 @@ Circles.Game.prototype = {
             pausedDialog.destroy();
             this.game.paused = false;
 
-            //share score on twitter
-            var tweetbegin = 'http://twitter.com/home?status=';
-            var tweettxt = 'I scored ' + Circles.GAME_SCORE + ' at Circles!! -' + window.location.href + '.';
-            var finaltweet = tweetbegin + encodeURIComponent(tweettxt);
-            window.open(finaltweet, '_blank');
+           
 
 
             this.restartGame();
