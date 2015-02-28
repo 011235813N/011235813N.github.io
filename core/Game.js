@@ -28,10 +28,10 @@ Circles.Game = function (game) {
 };
 Circles.Game.prototype = {
     create: function () {
-        
+
         console.log(Circles.GAME_SCORE);
-        
-        
+
+
         //******BUILD UI
         var titleRow = this.add.image(0, 0, 'titleRow');
         var headerRow = this.add.image(0, 75, 'headerRow');
@@ -49,9 +49,9 @@ Circles.Game.prototype = {
         };
         this._timerBar.width += 0.01;
         Circles._timerLimit = this.rnd.integerInRange(5, 15);
-        
-        
-        
+
+
+
         this._grid = this.add.group();
         var circAxisX = 60;
         var circAxisY = 200;
@@ -134,11 +134,11 @@ Circles.Game.prototype = {
         this._startTime = true;
         _timer.start();
     },
-    countDownTimer: function () {        
+    countDownTimer: function () {
         this._timeElapsed++;
         if (this._startTime) {
             countDownSeconds = Circles._timerLimit - this._timeElapsed;
-            this._timerBar.width += 630/Circles._timerLimit;
+            this._timerBar.width += 630 / Circles._timerLimit;
             if (countDownSeconds <= 0) {
                 this.gameOver();
             }
@@ -182,7 +182,7 @@ Circles.Game.prototype = {
         this.input.onDown.add(function () {
             pausedDialog.destroy();
             this.game.paused = false;
-
+            Circles.GAME_SCORE = 0;
             this.restartGame();
         }, this);
     },
@@ -221,7 +221,7 @@ Circles.item = {
             Circles.GAME_SCORE += 10;
             //Circles._scoreText.setText(Circles._score);
             Circles._scoreText.setText(Circles.GAME_SCORE);
-            
+
             circle.kill();
             if (Circles._counter == 5) {
                 Circles._gameState = 1;
