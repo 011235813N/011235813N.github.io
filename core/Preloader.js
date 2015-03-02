@@ -2,6 +2,7 @@ Circles.Preloader = function (game) {
     Circles.GAME_WIDTH = 640;
     Circles.GAME_HEIGHT = 800;
     Circles.GAME_SCORE = 0;
+    Circles.GAME_LEVEL = 1;
     
 };
 Circles.Preloader.prototype = {
@@ -18,6 +19,8 @@ Circles.Preloader.prototype = {
         this.load.image('dialog-ready', 'assets/img/dialogready.png');
         this.load.image('dialog-win', 'assets/img/dialogwin.png');
         this.load.image('dialog-gameover', 'assets/img/dialoggameover.png');
+        this.load.image('splash', 'assets/img/splash.png');
+        this.load.image('splash-title', 'assets/img/splashtitle.png');
         /**fonts**/
         this.load.bitmapFont('dosis', 'assets/fonts/dosis.png', 'assets/fonts/dosis.fnt');
 
@@ -28,10 +31,15 @@ Circles.Preloader.prototype = {
             'assets/img/circlestexture.png',
             'core/circles.json'
         );
+        this.load.spritesheet('button-start', 'assets/img/buttonstart.png', 303, 301);
+        
+        //load sounds
+        this.load.audio('happy','assets/sounds/happy_janian.mp3');
+        this.load.audio('hit','assets/sounds/hit.wav');
     },
     create: function () {
         //call main menu.
         //debug
-        this.state.start('Game');
+        this.state.start('MainMenu');
     }
 };

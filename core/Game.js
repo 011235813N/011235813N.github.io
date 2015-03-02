@@ -18,17 +18,20 @@ Circles.Game = function (game) {
     this._fontStyle = null;
     this._circlesHeaderArray = []; // arreglo de circulos del encabezado (temporal)
     Circles._gameCircleHeaderArray = []; //arreglo de circulos para todo el juego
-    //Circles._scoreText = null;
+    Circles._scoreText = null;
+    Circles._levelText = null;
     //Circles._score = 0;
     Circles._coinAsset = null;
     Circles._coinTween = null;
     Circles._counter = 0;
     Circles._gameState = 0; // 1:win | 2:game over 
     Circles._timerLimit = 1;
+    Circles._music = null;
+    Circles._hit = null;
 };
 Circles.Game.prototype = {
     create: function () {
-        
+
 
         //******BUILD UI
         var titleRow = this.add.image(0, 0, 'titleRow');
@@ -36,19 +39,19 @@ Circles.Game.prototype = {
         this._timerBar = this.add.image(0, 175, 'timerBar');
         var bmpTextTitle = this.add.bitmapText(15, 15, 'dosis', 'Circles!!', 60);
         var bmpTextPoints = this.add.bitmapText(Circles.GAME_WIDTH - 150, 15, 'dosis', 'points: ', 25);
+        var bmpTextLevel = this.add.bitmapText(Circles.GAME_WIDTH - 300, 15, 'dosis', 'Level: ', 25);
         Circles._scoreText = this.add.bitmapText(Circles.GAME_WIDTH - 85, 15, 'dosis', '', 40);
+        Circles._levelText = this.add.bitmapText(Circles.GAME_WIDTH - 230, 15, 'dosis', '111', 40);
         //******END BUILD UI
-        
-        /*this._fontStyle = {
-            font: "40px Arial",
-            fill: "#FFCC00",
-            stroke: "#333",
-            strokeThickness: 5,
-            align: "center"
-        };*/
+        Circles._music = new Phaser.Sound(this, 'happy', 0.3, true);
+        Circles._hit = new Phaser.Sound(this, 'hit', 0.3, false);
+
         Circles._scoreText.setText(Circles.GAME_SCORE);
+        Circles._levelText.setText(Circles.GAME_LEVEL);
+
+
         this._timerBar.width += 0.01;
-        Circles._timerLimit = this.rnd.integerInRange(5, 15);
+        Circles._timerLimit = this.rnd.integerInRange(15, 30);
 
 
 
@@ -106,6 +109,12 @@ Circles.Game.prototype = {
             pausedDialog.destroy();
             this.game.paused = false;
             Circles.item.buildCircles(this);
+            //******LOAD SOUNDS
+            if (!Circles._music.isPlaying) {
+                Circles._music.play();
+            }
+
+            //******END SOUNDS
         }, this);
     },
     recursive: function (index) {
@@ -169,29 +178,47 @@ Circles.Game.prototype = {
         Circles._coinAsset = null;
         Circles._coinTween = null;
         Circles._counter = 0;
-        Circles._gameState = 0; // 1:win | 2:game over 
+        Circles._gameState = 0; // 1:win | 2:game over
+        Circles._music.destroy(true);
         this.state.start('Game');
     },
     gameOver: function () {
-        this.game.paused = true;
-
+        var bestLevel;
+        var textGroup;
+        
         var pausedDialog = this.add.sprite(Circles.GAME_WIDTH / 2, Circles.GAME_HEIGHT / 2, 'dialog-gameover');
         pausedDialog.anchor.set(0.5);
+        
+        this.game.paused = true;
+
+        if (!!localStorage) {
+            bestLevel = localStorage.getItem('bestLevel');
+            var bmpTextYourBest = this.add.bitmapText((Circles.GAME_WIDTH/2)-50, (Circles.GAME_HEIGHT / 2)+100, 'dosis', 'Best Level: ' + bestLevel, 20,textGroup);
+            //this.add(bmpTextYourBest);
+            
+        }
+        
+       
+
+        
+        
+       
+        
 
 
         this.input.onDown.add(function () {
             pausedDialog.destroy();
             this.game.paused = false;
-            
-            
-             //share score on twitter
-            var tweetbegin = 'http://twitter.com/home?status=';
+            Circles._music.stop();
+
+            //share score on twitter
+            /*var tweetbegin = 'http://twitter.com/home?status=';
             var tweettxt = 'I scored ' + Circles.GAME_SCORE + ' at Circles!! -' + window.location.href + '.';
             var finaltweet = tweetbegin + encodeURIComponent(tweettxt);
-            window.open(finaltweet, '_blank');
-            
+            window.open(finaltweet, '_blank');*/
             Circles.GAME_SCORE = 0;
-            
+            Circles.GAME_LEVEL = 0;
+
             this.restartGame();
         }, this);
     },
@@ -203,7 +230,7 @@ Circles.Game.prototype = {
             pausedDialog.destroy();
             this.game.paused = false;
 
-           
+            Circles.GAME_LEVEL += 1;
 
 
             this.restartGame();
@@ -216,6 +243,7 @@ Circles.item = {
         game._grid.callAll('events.onInputDown.add', 'events.onInputDown', this.removeCircle);
     },
     removeCircle: function (circle) {
+        var bestLevel;
         if (Circles._gameCircleHeaderArray[Circles._counter] == circle.frameName) {
             Circles._coinAsset.x = circle.x;
             Circles._coinAsset.y = circle.y;
@@ -227,6 +255,20 @@ Circles.item = {
             //Circles._scoreText.setText(Circles._score);
             Circles._scoreText.setText(Circles.GAME_SCORE);
 
+            /*saving score*/
+            if (!!localStorage) {
+                bestLevel = localStorage.getItem('bestLevel');
+
+                console.log(bestLevel);
+
+                if (!bestLevel || bestLevel < Circles.GAME_LEVEL) {
+                    localStorage.setItem('bestLevel', Circles.GAME_LEVEL);
+                }
+            }
+
+
+
+            Circles._hit.play();
             circle.kill();
             if (Circles._counter == 5) {
                 Circles._gameState = 1;

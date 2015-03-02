@@ -1,0 +1,28 @@
+{"frames": [
+
+{
+	"filename": "Play_Icon_Pressed.png",
+	"frame": {"x":2,"y":2,"w":300,"h":300},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":300,"h":300},
+	"sourceSize": {"w":300,"h":300}
+},
+{
+	"filename": "Play_Icon_normal.png",
+	"frame": {"x":304,"y":2,"w":300,"h":300},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":300,"h":300},
+	"sourceSize": {"w":300,"h":300}
+}],
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "buttonstart.png",
+	"format": "RGBA8888",
+	"size": {"w":606,"h":304},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:b2262f0c71674476b17d8b7588eca90f:7ff6e293d3d682390a40d9b587756265:9d6764c2f9d77e308fe4576098750999$"
+}
+}
